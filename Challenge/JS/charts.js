@@ -57,21 +57,27 @@ function buildMetadata(sample) {
 function buildCharts(sample) {
   // 2. Use d3.json to load and retrieve the samples.json file 
   d3.json("samples.json").then((data) => {
-    // 3. Create a variable that holds the samples array. 
-    var sampleData = data.samples;
-    var frequency = data.wfreq;
-
+    // 3. Create a variable that holds the samples array.
+    var sampleData = data.samples; 
+    
+    console.log(frequency);
     // 4. Create a variable that filters the samples for the object with the desired sample number.
     var sampleArray = sampleData.filter(sampleObj => sampleObj.id == sample); 
     //  5. Create a variable that holds the first sample in the array.
     var firstPerson = sampleArray[0];
+    
+    var metadataArray = data.metadata.filter(sampleObj => sampleObj.id == sample); 
+    //  5. Create a variable that holds the first sample in the array.
+    var metadatafirstperson = metadataArray[0];
 
     // 6. Create variables that hold the otu_ids, otu_labels, and sample_values.
     var otu_ids = firstPerson.otu_ids;
     var otu_labels = firstPerson.otu_labels;
     var sample_values = firstPerson.sample_values;
+
+    var frequency = metadatafirstperson.wfreq;
     
-    console.log(otu_ids)
+    // console.log(otu_ids)
     // 7. Create the yticks for the bar chart.
     // Hint: Get the the top 10 otu_ids and map them in descending order  
     //  so the otu_ids with the most bacteria are last. 
@@ -115,23 +121,24 @@ function buildCharts(sample) {
       {
         domain: { x: [0, 1], y: [0, 1] },
         value: frequency,
-        title: { text: "Speed" },
+        title: { text: "Belly Button Washing Frequency" },
         type: "indicator",
-        mode: "gauge+number+delta",
+        mode: "gauge+number",
         delta: { reference: 380 },
         gauge: {
-          axis: { range: [null, 10] },
+          axis: { range: [0, 10] },
+          bar: {color: "black"},
           steps: [
-            { range: [0, 2], color: "lightgray" },
-            { range: [2, 4], color: "gray" },
-            { range: [4, 6], color: "blue" },
-            { range: [6, 8], color: "red" },
-            { range: [8, 10], color: "yellow" }
+            { range: [0, 2], color: "red" },
+            { range: [2, 4], color: "orange" },
+            { range: [4, 6], color: "yellow" },
+            { range: [6, 8], color: "limegreen" },
+            { range: [8, 10], color: "forestgreen" }
           ],
           threshold: {
-            line: { color: "red", width: 4 },
+            line: { color: "black", width: 4 },
             thickness: 0.75,
-            value: 490
+            value: frequency
           }
         }
       }
